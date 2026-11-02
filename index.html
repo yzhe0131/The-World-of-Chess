@@ -1,0 +1,1065 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chess Data Visualisation</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/vega@6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@6"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@7"></script>
+</head>
+
+<body>
+
+    <header class="hero">
+        <div class="page-container">
+
+            <p class="eyebrow">
+                FIT3179 Data Visualisation
+            </p>
+
+            <h1>The World of Chess</h1>
+
+            <p class="hero-description">
+                Explore chess through geography and player strength.
+            </p>
+
+        </div>
+    </header>
+
+    <main>
+
+        <!-- Introduction -->
+        <section class="chess-primer page-container" aria-labelledby="primer-title">
+            <h2 class="chart-title" id="primer-title">
+                Chess, in 30 Seconds
+            </h2>
+
+            <dl class="primer-grid">
+                <div>
+                    <dt>
+                        <span aria-hidden="true">♛</span>FIDE
+                    </dt>
+                    <dd>
+                        The international governing body for competitive chess.
+                    </dd>
+                </div>
+
+                <div>
+                    <dt>
+                        <span aria-hidden="true">↗</span>Chess Rating
+                    </dt>
+                    <dd>
+                        A number estimating playing strength.
+                        Higher generally means stronger.
+                    </dd>
+                </div>
+
+                <div>
+                    <dt>
+                        <span aria-hidden="true">◷</span>Standard Chess
+                    </dt>
+                    <dd>
+                        Competitive chess with longer thinking time.
+                    </dd>
+                </div>
+            </dl>
+        </section>
+
+        <!-- Chart 01 -->
+        <section class="chapter" aria-labelledby="global-chess-title">
+            <div class="page-container">
+
+                <header class="chapter-header">
+                    <p class="section-number">01 / GLOBAL REACH</p>
+
+                    <h2 id="global-chess-title" class="chapter-title">
+                        Where Is Chess Most Popular per Person?
+                    </h2>
+
+                    <p class="section-intro">
+                        Compare FIDE-rated players per million residents.
+                    </p>
+                </header>
+
+                <figure class="chart-block">
+                    <div class="chart-visual">
+                        <div id="rated-players-map" class="visualisation"></div>
+                    </div>
+
+                    <p class="insight">
+                        <strong>
+                            Spain has 815 rated players per million residents;
+                            India has 39.
+                        </strong>
+                    </p>
+
+                    <figcaption class="source">
+                        Sources: FIDE; World Bank population estimates, 2025.
+                        Grey indicates missing data.
+                    </figcaption>
+                </figure>
+
+            </div>
+        </section>
+
+        <!-- Chart 02 -->
+        <section class="chapter" aria-labelledby="players-by-country-title">
+            <div class="page-container">
+
+                <header class="chapter-header">
+                    <p class="section-number">02 / ABSOLUTE SCALE</p>
+
+                    <h2 id="players-by-country-title" class="chapter-title">
+                        Where Are the Largest Rated Player Pools?
+                    </h2>
+
+                    <p class="section-intro">
+                        Circle size represents each federation's number of
+                        standard-rated players.
+                    </p>
+                </header>
+
+                <figure class="chart-block">
+                    <div class="chart-visual">
+                        <div id="players-by-country-map" class="visualisation"></div>
+                    </div>
+
+                    <p class="insight">
+                        <strong>
+                            India has the largest player pool:
+                            57,414 standard-rated players.
+                        </strong>
+                    </p>
+
+                    <figcaption class="source">
+                        Source: FIDE, October 2026.
+                        Click a circle to highlight a federation.
+                    </figcaption>
+                </figure>
+
+            </div>
+        </section>
+
+        <!-- Chart 03 -->
+        <section class="chapter" aria-labelledby="population-rank-title">
+            <div class="page-container">
+
+                <header class="chapter-header">
+                    <p class="section-number">03 / POPULATION AND RANK</p>
+
+                    <h2 id="population-rank-title" class="chapter-title">
+                        Do Large Player Pools Also Rank High per Capita?
+                    </h2>
+
+                    <p class="section-intro">
+                        Compare total-player and per-million ranks;
+                        select a country. Rank 1 is highest.
+                    </p>
+                </header>
+
+                <figure class="chart-block">
+                    <div id="population-rank-controls" class="slope-controls"></div>
+
+                    <div class="chart-visual">
+                        <div id="population-rank-slope" class="visualisation"></div>
+                    </div>
+
+                    <p class="insight">
+                        India ranks
+                        <strong>#1 by total players</strong>
+                        and
+                        <strong>#135 per million residents</strong>.
+                    </p>
+
+                    <figcaption class="source">
+                        Sources: FIDE and World Bank population estimates, 2025.
+                        <a href="data/population_ranks.csv" download>
+                            Download full rankings (CSV)
+                        </a>.
+                    </figcaption>
+                </figure>
+
+            </div>
+        </section>
+
+        <!-- Chart 04 -->
+        <section class="chapter" aria-labelledby="player-strength-title">
+            <div class="page-container">
+
+                <header class="chapter-header">
+                    <p class="section-number">04 / PLAYER STRENGTH</p>
+
+                    <h2 id="player-strength-title" class="chapter-title">
+                        Do Bigger Player Pools Mean Higher Ratings?
+                    </h2>
+
+                    <p class="section-intro">
+                        Compare rating distributions in the eight largest federations.
+                    </p>
+                </header>
+
+                <figure class="chart-block">
+                    <div class="chart-visual">
+
+                        <ul class="box-reading-key" aria-label="How to read the box plot">
+                            <li>
+                                <span class="key-mark key-median" aria-hidden="true"></span>
+                                <span>
+                                    <strong>Median</strong> · middle rating
+                                </span>
+                            </li>
+
+                            <li>
+                                <span class="key-mark key-box" aria-hidden="true"></span>
+                                <span>
+                                    <strong>Box</strong> · middle 50%
+                                </span>
+                            </li>
+
+                            <li>
+                                <span class="key-mark key-whisker" aria-hidden="true"></span>
+                                <span>
+                                    <strong>Whiskers</strong> · within 1.5×IQR*
+                                </span>
+                            </li>
+                        </ul>
+
+                        <div id="rating-boxplot" class="visualisation"></div>
+                    </div>
+
+                    <p class="insight">
+                        India's median rating is
+                        <strong>1,531</strong>,
+                        compared with
+                        <strong>1,865</strong>
+                        in Germany.
+                    </p>
+
+                    <figcaption class="source">
+                        Source: FIDE, October 2026;
+                        266,109 rated-player records.
+                        *Outlier records are included; their markers are hidden.
+                    </figcaption>
+                </figure>
+
+            </div>
+        </section>
+
+        <!-- Chart 05 -->
+        <section class="chapter" aria-labelledby="rating-groups-title">
+            <div class="page-container">
+
+                <header class="chapter-header">
+                    <p class="section-number">05 / RATING COMPOSITION</p>
+
+                    <h2 id="rating-groups-title" class="chapter-title">
+                        Which Rating Groups Are Most Common?
+                    </h2>
+
+                    <p class="section-intro">
+                        Compare the percentage of rated players in each rating band.
+                    </p>
+                </header>
+
+                <figure class="chart-block rating-groups-chart">
+                    <div class="chart-visual">
+                        <div id="rating-groups-heatmap" class="visualisation"></div>
+                    </div>
+
+                    <div
+                        class="scale-legend scale-legend--rating-groups"
+                        role="img"
+                        aria-label="Share of rated players, from 0 to 100 percent"
+                    >
+                        <div class="scale-legend-content">
+                            <span class="scale-legend-title">
+                                Share of rated players
+                            </span>
+
+                            <span class="scale-legend-gradient"></span>
+
+                            <span class="scale-legend-ticks">
+                                <span>0%</span>
+                                <span>25%</span>
+                                <span>50%</span>
+                                <span>75%</span>
+                                <span>100%</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <p class="insight">
+                        <strong>67.5%</strong>
+                        of India's rated players are below 1600.
+                    </p>
+
+                    <figcaption class="source">
+                        Source: FIDE, October 2026.
+                        Each country's row totals 100%.
+                    </figcaption>
+                </figure>
+
+            </div>
+        </section>
+
+        <!-- Chart 06 -->
+        <section class="chapter" aria-labelledby="opening-sunburst-title">
+            <div class="page-container">
+
+                <header class="chapter-header">
+                    <p class="section-number">06 / OPENING LANDSCAPE</p>
+
+                    <h2 id="opening-sunburst-title" class="chapter-title">
+                        Which Openings Begin the Most Games?
+                    </h2>
+
+                    <p class="section-intro">
+                        Explore how popular first moves branch into openings and defences.
+                    </p>
+                </header>
+
+                <div class="opening-controls">
+                    <p id="opening-current" aria-live="polite">
+                        Showing all openings
+                    </p>
+
+                    <button id="opening-reset" type="button">
+                        Reset chart
+                    </button>
+                </div>
+
+                <figure class="chart-block">
+                    <div class="chart-visual">
+                        <div id="chess-opening-sunburst" class="visualisation"></div>
+                    </div>
+
+                    <p class="insight">
+                        <strong>1.e4</strong>
+                        accounts for 48.8% of the recorded opening counts.
+                    </p>
+
+                    <figcaption class="source">
+                        Source:
+                        <a href="https://github.com/crawftv/chess_openings">
+                            Chess Tempo openings database
+                        </a>,
+                        via
+                        <a href="https://www.kaggle.com/datasets/alexandrelemercier/all-chess-openings">
+                            Kaggle
+                        </a>.
+                    </figcaption>
+                </figure>
+
+            </div>
+        </section>
+
+        <!-- Chart 07 -->
+        <section class="chapter" aria-labelledby="rating-ladder-title">
+            <div class="page-container">
+
+                <header class="chapter-header">
+                    <p class="section-number">07 / THE RATING LADDER</p>
+
+                    <h2 id="rating-ladder-title" class="chapter-title">
+                        How Rare Is a 2200+ Rating?
+                    </h2>
+
+                    <p class="section-intro">
+                        See how many FIDE-rated players fall within each 100-point band.
+                    </p>
+                </header>
+
+                <figure class="chart-block rating-ladder-chart">
+                    <div class="chart-visual">
+                        <div id="rating-ladder-chart" class="visualisation"></div>
+                    </div>
+
+                    <p class="insight">
+                        Only <strong>3.6%</strong>
+                        of rated players reach 2200 or above.
+                    </p>
+
+                    <figcaption class="source">
+                        Source: FIDE standard-rated player list,
+                        October 2026; 569,651 players.
+                    </figcaption>
+                </figure>
+
+            </div>
+        </section>
+
+        <!-- Chart 08 -->
+        <section class="chapter" aria-labelledby="rank-measure-title">
+            <div class="page-container">
+
+                <header class="chapter-header">
+                    <p class="section-number">08 / TWO WAYS TO MEASURE CHESS</p>
+
+                    <h2 id="rank-measure-title" class="chapter-title">
+                        Do Player-Count and Per-Capita Rankings Agree?
+                    </h2>
+
+                    <p class="section-intro">
+                        Compare country ranks by total rated players and players per million.
+                    </p>
+                </header>
+
+                <figure class="chart-block">
+                    <div class="chart-visual">
+                        <div id="rank-measure-comparison" class="visualisation"></div>
+                    </div>
+
+                    <p class="insight">
+                        India ranks
+                        <strong>#1 by total players</strong>;
+                        Palau ranks
+                        <strong>#1 per million residents</strong>.
+                    </p>
+
+                    <figcaption class="source">
+                        Sources: FIDE-rated player counts;
+                        World Bank population estimates, 2025.
+                    </figcaption>
+                </figure>
+
+            </div>
+        </section>
+
+        <!-- Chart 09: Elite player rankings -->
+        <section class="chapter" aria-labelledby="elite-players-title">
+            <div class="page-container">
+
+                <header class="chapter-header">
+                    <p class="section-number">09 / ELITE CHESS</p>
+
+                    <h2 id="elite-players-title" class="chapter-title">
+                        Which Federations Have the Most 2200+ Players?
+                    </h2>
+
+                    <p class="section-intro">
+                        Compare selected federations by high-rated player count and share.
+                    </p>
+                </header>
+
+                <figure class="chart-block">
+                    <div class="chart-visual">
+                        <div id="elite-players-chart" class="visualisation"></div>
+                    </div>
+
+                    <p class="insight">
+                        <strong>Russia</strong>
+                        leads the selected group with
+                        <strong>3,353</strong>
+                        players rated 2200+;
+                        <strong>Ukraine</strong>
+                        has the highest share at
+                        <strong>12.42%</strong>.
+                    </p>
+
+                    <figcaption class="source">
+                        Source: FIDE standard-rated player list,
+                        October 2026. Selected federations only.
+                    </figcaption>
+                </figure>
+
+            </div>
+        </section>
+
+        <!-- Chart 10 -->
+        <section class="chapter" aria-labelledby="age-rating-hexbin-title">
+            <div class="page-container">
+
+                <header class="chapter-header">
+                    <p class="section-number">10 / AGE AND RATING</p>
+
+                    <h2 id="age-rating-hexbin-title" class="chapter-title">
+                        How Do Ratings Vary Across Player Ages?
+                    </h2>
+
+                    <p class="section-intro">
+                        Each hexagon counts players in an age and rating range.
+                    </p>
+                </header>
+
+                <figure class="chart-block age-rating-chart">
+                    <div class="chart-visual">
+                        <div id="age-rating-hexbin" class="visualisation"></div>
+                    </div>
+
+                    <div
+                        class="scale-legend scale-legend--age-rating"
+                        role="img"
+                        aria-label="Players per hexagon; square-root colour scale"
+                    >
+                        <div class="scale-legend-content">
+                            <span class="scale-legend-title">
+                                Players per hexagon
+                            </span>
+
+                            <span class="scale-legend-gradient"></span>
+
+                            <span class="scale-legend-ticks">
+                                <span>10k</span>
+                                <span>20k</span>
+                                <span>30k</span>
+                                <span>40k</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <p class="insight">
+                        Median ratings are
+                        <strong>1,552</strong>
+                        for ages 10–19 and
+                        <strong>1,833</strong>
+                        for ages 60–69.
+                    </p>
+
+                    <figcaption class="source">
+                        Source: FIDE standard-rated player list, October 2026.
+                    </figcaption>
+                </figure>
+
+            </div>
+        </section>
+
+        <!-- Chart 11 -->
+        <section class="chapter" aria-labelledby="time-control-title">
+            <div class="page-container">
+
+                <header class="chapter-header">
+                    <p class="section-number">11 / THREE SPEEDS OF CHESS</p>
+
+                    <h2 id="time-control-title" class="chapter-title">
+                        Do Rating Groups Match Across Time Controls?
+                    </h2>
+
+                    <p class="section-intro">
+                        Compare matched players' rating groups in Standard,
+                        Rapid and Blitz.
+                    </p>
+                </header>
+
+                <figure class="chart-block">
+                    <div class="chart-visual">
+                        <div id="time-control-matrix" class="visualisation"></div>
+                    </div>
+
+                    <p class="insight">
+                        <strong>59.1%</strong>
+                        of players are in the same rating group
+                        across all three time controls.
+                    </p>
+
+                    <figcaption class="source">
+                        Source: FIDE standard, rapid and blitz ratings,
+                        October 2026.
+                    </figcaption>
+                </figure>
+
+            </div>
+        </section>
+
+        <!-- Data Sources -->
+        <section class="data-sources" aria-labelledby="data-sources-title">
+            <div class="page-container">
+
+                <h2 id="data-sources-title" class="data-sources-title">
+                    Data &amp; Sources
+                </h2>
+
+                <ul class="data-source-list">
+
+                    <li>
+                        <strong>01–03 · Country participation:</strong>
+                        FIDE federation counts and World Bank 2025 population estimates.
+                        Rankings use the same 200 eligible federations;
+                        Taiwan is excluded for missing population data.
+                        Missing map values are not zero.
+                    </li>
+
+                    <li>
+                        <strong>04–05 · Rating comparisons:</strong>
+                        FIDE, October 2026; 266,109 rated records in the
+                        eight largest federations.
+                        Whiskers extend to observations within 1.5×IQR;
+                        unusual values remain in calculations.
+                    </li>
+
+                    <li>
+                        <strong>06 · Openings:</strong>
+                        Chess Tempo openings dataset via Kaggle.
+                        The chart uses 1,882 records with valid first-move notation,
+                        100+ high-Elo games, and last-played dates from 2010–2018.
+                        Shares use summed source counts.
+                    </li>
+
+                    <li>
+                        <strong>07–08 · Ratings and ranks:</strong>
+                        Chart 07 includes 569,651 positive standard ratings,
+                        including FID and NON records;
+                        its 100-point bins are lower-inclusive and upper-exclusive.
+                        A 2200+ rating is not an official title.
+                        Chart 08 uses FIDE counts and World Bank 2025 population.
+                    </li>
+
+                    <li>
+                        <strong>09 · Elite player rankings:</strong>
+                        FIDE standard-rated player data, October 2026.
+                        The chart compares 25 selected federations using their
+                        number of players rated 2200 or above and the share
+                        of their standard-rated player populations.
+                        It is not a complete global ranking.
+                    </li>
+
+                    <li>
+                        <strong>10 · Age:</strong>
+                        561,184 players have positive standard ratings and
+                        valid birth years; 8,467 rated records without a valid
+                        birth year are excluded.
+                        Age is estimated as 2026 minus birth year,
+                        so this is a cross-sectional comparison.
+                    </li>
+
+                    <li>
+                        <strong>11 · Time controls:</strong>
+                        194,380 unique FIDE records have positive Standard,
+                        Rapid and Blitz ratings.
+                        The three pairwise matrices compare rating-group counts
+                        between controls; these bands are analytical,
+                        not official categories, and do not show change over time.
+                    </li>
+
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="page-container">
+            FIT3179 Data Visualisation 2 · 2026
+        </div>
+    </footer>
+
+    <script>
+
+        // Chart 01
+        vegaEmbed(
+            "#rated-players-map",
+            "vis/rated_players_map.vg.json",
+            { actions: false }
+        );
+
+        // Chart 04
+        vegaEmbed(
+            "#rating-boxplot",
+            "vis/rating_boxplot.vg.json",
+            { actions: false }
+        );
+
+        // Chart 05
+        vegaEmbed(
+            "#rating-groups-heatmap",
+            "vis/rating_groups_heatmap.vg.json",
+            { actions: false }
+        );
+
+        // Chart 06
+        const openingCurrent = document.querySelector("#opening-current");
+        const openingReset = document.querySelector("#opening-reset");
+
+        vegaEmbed(
+            "#chess-opening-sunburst",
+            "vis/chess_opening_sunburst.vg.json",
+            { actions: false, renderer: "svg" }
+        ).then(async ({ view }) => {
+
+            const response = await fetch("data/chess_opening_sunburst.csv");
+
+            if (!response.ok) {
+                throw new Error(
+                    `Could not load opening sunburst data: ${response.status}`
+                );
+            }
+
+            const [headers, ...records] = parseCsv(await response.text());
+
+            const focusColumn = headers.indexOf("focus_id");
+            const nodeColumn = headers.indexOf("node_id");
+            const fullNameColumn = headers.indexOf("full_name");
+            const canZoomColumn = headers.indexOf("can_zoom");
+
+            if (
+                [focusColumn, nodeColumn, fullNameColumn, canZoomColumn]
+                    .some((column) => column < 0)
+            ) {
+                throw new Error(
+                    "Opening sunburst data is missing required interaction fields."
+                );
+            }
+
+            const openingNodes = new Map(
+                records
+                    .filter((record) => record[focusColumn] === "root")
+                    .map((record) => [
+                        record[fullNameColumn],
+                        {
+                            id: record[nodeColumn],
+                            canZoom: record[canZoomColumn] === "1"
+                        }
+                    ])
+            );
+
+            const resetOpening = () => {
+                view.signal("currentFocus", "root")
+                    .runAsync()
+                    .then(() => {
+                        openingCurrent.textContent = "Showing all openings";
+                    })
+                    .catch((error) => {
+                        console.error(
+                            "Could not reset the opening sunburst.",
+                            error
+                        );
+                    });
+            };
+
+            openingReset.addEventListener("click", resetOpening);
+
+            document
+                .querySelector("#chess-opening-sunburst")
+                .addEventListener("click", (event) => {
+
+                    const mark = event.target.closest(
+                        'path[role="graphics-symbol"][aria-label*="Opening:"]'
+                    );
+
+                    const match = mark && mark.getAttribute("aria-label").match(
+                        /Opening: (.*?); Recorded games:/
+                    );
+
+                    const opening = match && openingNodes.get(match[1]);
+
+                    if (!opening || !opening.canZoom) return;
+
+                    view.signal("currentFocus", opening.id)
+                        .runAsync()
+                        .then(() => {
+                            openingCurrent.textContent = `Showing: ${match[1]}`;
+                        })
+                        .catch((error) => {
+                            console.error(
+                                "Could not zoom into the selected opening.",
+                                error
+                            );
+                        });
+                });
+
+        }).catch((error) => {
+            console.error(
+                "Could not initialize the opening sunburst.",
+                error
+            );
+
+            openingCurrent.textContent =
+                "Opening chart could not be loaded.";
+        });
+
+        // Chart 07
+        vegaEmbed(
+            "#rating-ladder-chart",
+            "vis/rating_ladder.vg.json",
+            { actions: false, renderer: "svg" }
+        ).catch((error) => {
+            console.error(
+                "Could not initialize the rating ladder chart.",
+                error
+            );
+        });
+
+        // Chart 08
+        vegaEmbed(
+            "#rank-measure-comparison",
+            "vis/rank_measure_comparison.vg.json",
+            { actions: false, renderer: "svg" }
+        ).catch((error) => {
+            console.error(
+                "Could not initialize the ranking comparison chart.",
+                error
+            );
+        });
+
+        // Chart 09: New elite player ranking chart
+        vegaEmbed(
+            "#elite-players-chart",
+            "vis/chess_talent_cartogram.vg.json",
+            { actions: false, renderer: "svg" }
+        ).catch((error) => {
+            console.error(
+                "Could not initialize Chart 09 (2200+ player rankings).",
+                error
+            );
+        });
+
+        // Chart 10
+        vegaEmbed(
+            "#age-rating-hexbin",
+            "vis/age_rating_hexbin.vg.json",
+            { actions: false, renderer: "svg" }
+        ).catch((error) => {
+            console.error(
+                "Could not initialize the age-rating hexbin chart.",
+                error
+            );
+        });
+
+        // Chart 11
+        vegaEmbed(
+            "#time-control-matrix",
+            "vis/time_control_alluvial.vg.json",
+            { actions: false, renderer: "svg" }
+        ).catch((error) => {
+            console.error(
+                "Could not initialize the time-control comparison matrix.",
+                error
+            );
+        });
+
+        // CSV parser used for interactions
+        function parseCsv(text) {
+            const rows = [];
+            let row = [];
+            let field = "";
+            let quoted = false;
+
+            for (let i = 0; i < text.length; i += 1) {
+                const character = text[i];
+
+                if (
+                    quoted &&
+                    character === '"' &&
+                    text[i + 1] === '"'
+                ) {
+                    field += '"';
+                    i += 1;
+
+                } else if (character === '"') {
+                    quoted = !quoted;
+
+                } else if (!quoted && character === ",") {
+                    row.push(field);
+                    field = "";
+
+                } else if (
+                    !quoted &&
+                    (character === "\n" || character === "\r")
+                ) {
+                    if (
+                        character === "\r" &&
+                        text[i + 1] === "\n"
+                    ) {
+                        i += 1;
+                    }
+
+                    row.push(field);
+                    rows.push(row);
+                    row = [];
+                    field = "";
+
+                } else {
+                    field += character;
+                }
+            }
+
+            if (field || row.length) {
+                row.push(field);
+                rows.push(row);
+            }
+
+            return rows;
+        }
+
+        // Chart 03: Country selector
+        const rankControls =
+            document.querySelector("#population-rank-controls");
+
+        vegaEmbed(
+            "#population-rank-slope",
+            "vis/population_rank_slope.vg.json",
+            { actions: false }
+        ).then(async ({ view }) => {
+
+            const response = await fetch("data/population_ranks.csv");
+
+            if (!response.ok) {
+                throw new Error(
+                    `Could not load population_ranks.csv: ${response.status}`
+                );
+            }
+
+            const [headers, ...records] =
+                parseCsv(await response.text());
+
+            const countryColumn = headers.indexOf("country");
+            const selectedColumn = headers.indexOf("selected");
+
+            if (countryColumn < 0 || selectedColumn < 0) {
+                throw new Error(
+                    "population_ranks.csv is missing country or selected fields."
+                );
+            }
+
+            const countries = records
+                .filter(
+                    (record) => record[selectedColumn] === "1"
+                )
+                .map(
+                    (record) => record[countryColumn]
+                )
+                .filter(Boolean);
+
+            if (!countries.length) {
+                throw new Error(
+                    "population_ranks.csv contains no selected countries."
+                );
+            }
+
+            const label = document.createElement("label");
+            label.textContent = "Highlight country: ";
+
+            const select = document.createElement("select");
+            select.setAttribute(
+                "aria-label",
+                "Highlight country"
+            );
+
+            [
+                ["All countries", "All countries"],
+                ...countries.map(
+                    (country) => [country, country]
+                )
+            ].forEach(([text, value]) => {
+
+                const option = document.createElement("option");
+                option.textContent = text;
+                option.value = value;
+                select.append(option);
+
+            });
+
+            select.value = countries.includes("Malaysia")
+                ? "Malaysia"
+                : "All countries";
+
+            label.append(select);
+            rankControls.replaceChildren(label);
+
+            select.addEventListener("change", () => {
+
+                view.signal("countryPick", select.value)
+                    .runAsync()
+                    .catch((error) => {
+                        console.error(
+                            "Could not update the slope-chart highlight.",
+                            error
+                        );
+                    });
+            });
+
+            await view.signal("countryPick", select.value).runAsync();
+
+        }).catch((error) => {
+            console.error(
+                "Could not initialize the population-rank chart.",
+                error
+            );
+
+            rankControls.textContent =
+                "Country selector could not be loaded.";
+        });
+
+        // Chart 02: Proportional symbol map
+        vegaEmbed(
+            "#players-by-country-map",
+            "vis/players_by_country_proportional_map.vg.json",
+            { actions: false, renderer: "svg" }
+        ).then(() => {
+
+            const map =
+                document.querySelector("#players-by-country-map");
+
+            function highlightCountry(selectedCountry) {
+
+                map.querySelectorAll(
+                    'path[role="graphics-symbol"][aria-label*="Country:"]'
+                ).forEach((circle) => {
+
+                    const circleCountry =
+                        circle.getAttribute("aria-label")
+                            .match(/Country: ([^;]+)/)?.[1];
+
+                    circle.style.removeProperty("opacity");
+                    circle.style.removeProperty("fill");
+                    circle.style.removeProperty("stroke");
+                    circle.style.removeProperty("stroke-width");
+
+                    if (
+                        selectedCountry &&
+                        circleCountry === selectedCountry
+                    ) {
+                        circle.style.opacity = "1";
+                        circle.style.fill = "#713d24";
+                        circle.style.stroke = "#452315";
+                        circle.style.strokeWidth = "2.4px";
+
+                    } else if (selectedCountry) {
+                        circle.style.opacity = "0.15";
+                    }
+                });
+            }
+
+            map.addEventListener("click", (event) => {
+
+                const mark = event.target.closest(
+                    'path[role="graphics-symbol"][aria-label*="Country:"]'
+                );
+
+                if (!mark || !map.contains(mark)) return;
+
+                const country =
+                    mark.getAttribute("aria-label")
+                        .match(/Country: ([^;]+)/)?.[1];
+
+                if (!country) return;
+
+                const selectedCountry =
+                    map.dataset.highlightedCountry === country
+                        ? ""
+                        : country;
+
+                map.dataset.highlightedCountry = selectedCountry;
+                highlightCountry(selectedCountry);
+
+            });
+        });
+
+    </script>
+
+</body>
+</html>

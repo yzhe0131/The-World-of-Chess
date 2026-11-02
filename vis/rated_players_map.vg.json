@@ -1,0 +1,165 @@
+
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+
+  "width": "container",
+  "height": 480,
+  "autosize": { "type": "fit-x", "contains": "padding", "resize": true },
+  "background": "#fbf7ef",
+
+  "projection": {
+    "type": "equalEarth"
+  },
+
+  "data": {
+    "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
+    "format": {
+      "type": "topojson",
+      "feature": "countries"
+    }
+  },
+
+  "transform": [
+    {
+      "calculate": "datum.properties && datum.properties.name === 'Kosovo' ? 383 : (isValid(datum.id) && datum.id !== '' ? toNumber(datum.id) : null)",
+      "as": "iso_numeric"
+    },
+    {
+      "lookup": "iso_numeric",
+      "from": {
+        "data": {
+          "url": "data/chess_population_map.csv",
+          "format": {
+            "type": "csv",
+            "parse": {
+              "iso_numeric": "number",
+              "rated_players": "number",
+              "population": "number",
+              "players_per_million": "number"
+            }
+          }
+        },
+        "key": "iso_numeric",
+        "fields": [
+          "country",
+          "rated_players",
+          "population",
+          "population_year",
+          "players_per_million"
+        ]
+      }
+    },
+    {
+      "calculate": "isValid(datum.players_per_million) && datum.players_per_million !== '' ? toNumber(datum.players_per_million) : null",
+      "as": "players_per_million"
+    }
+  ],
+
+  "layer": [
+    {
+      "data": { "values": [{ "type": "Sphere" }] },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#eaf3f7",
+        "stroke": null
+      }
+    },
+    {
+      "mark": {
+        "type": "geoshape",
+        "fill": "#bdbdbd",
+        "stroke": "#ffffff",
+        "strokeWidth": 0.65
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "isValid(datum.players_per_million)"
+        }
+      ],
+
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#ffffff",
+        "strokeWidth": 0.65
+      },
+
+      "encoding": {
+        "color": {
+          "field": "players_per_million",
+          "type": "quantitative",
+          "title": "Players per million",
+
+          "scale": {
+            "type": "sqrt",
+            "zero": true,
+            "range": [
+              "#D4B38C",
+              "#C69A6C",
+              "#AF794D",
+              "#945B37",
+              "#713D24",
+              "#452315"
+            ]
+          },
+
+          "legend": {
+            "orient": "right",
+            "direction": "vertical",
+            "titleLimit": 0,
+            "titlePadding": 8,
+            "offset": 14,
+            "values": [0, 100, 500, 2000],
+            "labelOverlap": true,
+            "titleFont": "Inter",
+            "labelFont": "Inter",
+            "titleFontSize": 13,
+            "labelFontSize": 12,
+            "titleColor": "#33261e",
+            "labelColor": "#66574b",
+            "gradientLength": 220
+          }
+        },
+
+        "tooltip": [
+          {
+            "field": "country",
+            "type": "nominal",
+            "title": "Country"
+          },
+          {
+            "field": "rated_players",
+            "type": "quantitative",
+            "title": "FIDE-rated players",
+            "format": ","
+          },
+          {
+            "field": "population",
+            "type": "quantitative",
+            "title": "Population",
+            "format": ","
+          },
+          {
+            "field": "population_year",
+            "type": "nominal",
+            "title": "Population year"
+          },
+          {
+            "field": "players_per_million",
+            "type": "quantitative",
+            "title": "Players per million",
+            "format": ",.1f"
+          }
+        ]
+      }
+    }
+  ],
+
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Inter"
+  }
+}

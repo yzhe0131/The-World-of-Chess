@@ -1,0 +1,476 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Transition matrices comparing rating groups across Standard, Rapid and Blitz chess.",
+  "background": null,
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Inter, Arial, sans-serif",
+    "axis": {
+      "labelFont": "Inter, Arial, sans-serif",
+      "titleFont": "Inter, Arial, sans-serif",
+      "labelColor": "#4E4136",
+      "titleColor": "#33261E",
+      "labelFontSize": 11,
+      "titleFontSize": 12,
+      "grid": false,
+      "domain": false,
+      "tickColor": "#CDBEAB"
+    },
+    "title": {
+      "font": "Inter, Arial, sans-serif",
+      "color": "#33261E",
+      "fontSize": 14,
+      "fontWeight": 700,
+      "anchor": "start"
+    },
+    "legend": {
+      "labelFont": "Inter, Arial, sans-serif",
+      "titleFont": "Inter, Arial, sans-serif",
+      "labelColor": "#4E4136",
+      "titleColor": "#33261E",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    }
+  },
+  "spacing": 24,
+  "hconcat": [
+    {
+      "title": "Standard → Rapid",
+      "width": 250,
+      "height": 250,
+      "data": {
+        "url": "data/time_control_alluvial.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "stage_x": "number",
+            "flow_count": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.record_type === 'flow' && datum.stage_x === 0"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "rect",
+            "cornerRadius": 2,
+            "stroke": "#FBF7EF",
+            "strokeWidth": 1.2
+          },
+          "encoding": {
+            "x": {
+              "field": "rapid_group",
+              "type": "nominal",
+              "title": "Rapid rating group",
+              "sort": [
+                "Below 1600",
+                "1600–1799",
+                "1800–1999",
+                "2000–2199",
+                "2200+"
+              ]
+            },
+            "y": {
+              "field": "standard_group",
+              "type": "nominal",
+              "title": "Standard rating group",
+              "sort": [
+                "2200+",
+                "2000–2199",
+                "1800–1999",
+                "1600–1799",
+                "Below 1600"
+              ]
+            },
+            "color": {
+              "aggregate": "sum",
+              "field": "flow_count",
+              "type": "quantitative",
+              "title": "Players",
+              "scale": {
+                "scheme": "brownbluegreen"
+              }
+            },
+            "tooltip": [
+              {
+                "field": "standard_group",
+                "type": "nominal",
+                "title": "Standard"
+              },
+              {
+                "field": "rapid_group",
+                "type": "nominal",
+                "title": "Rapid"
+              },
+              {
+                "aggregate": "sum",
+                "field": "flow_count",
+                "type": "quantitative",
+                "format": ",d",
+                "title": "Players"
+              }
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "aggregate": [
+                {
+                  "op": "sum",
+                  "field": "flow_count",
+                  "as": "cell_count"
+                }
+              ],
+              "groupby": [
+                "rapid_group",
+                "standard_group"
+              ]
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "Inter, Arial, sans-serif",
+            "fontSize": 10,
+            "fontWeight": 600
+          },
+          "encoding": {
+            "x": {
+              "field": "rapid_group",
+              "type": "nominal",
+              "sort": [
+                "Below 1600",
+                "1600–1799",
+                "1800–1999",
+                "2000–2199",
+                "2200+"
+              ]
+            },
+            "y": {
+              "field": "standard_group",
+              "type": "nominal",
+              "sort": [
+                "2200+",
+                "2000–2199",
+                "1800–1999",
+                "1600–1799",
+                "Below 1600"
+              ]
+            },
+            "text": {
+              "field": "cell_count",
+              "type": "quantitative",
+              "format": ",d"
+            },
+            "color": {
+              "condition": {
+                "test": "datum.cell_count <= 5000 || datum.cell_count >= 38000",
+                "value": "#fffaf2"
+              },
+              "value": "#33261E"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Standard → Blitz",
+      "width": 250,
+      "height": 250,
+      "data": {
+        "url": "data/time_control_alluvial.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "stage_x": "number",
+            "flow_count": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.record_type === 'flow' && datum.stage_x === 0"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "rect",
+            "cornerRadius": 2,
+            "stroke": "#FBF7EF",
+            "strokeWidth": 1.2
+          },
+          "encoding": {
+            "x": {
+              "field": "blitz_group",
+              "type": "nominal",
+              "title": "Blitz rating group",
+              "sort": [
+                "Below 1600",
+                "1600–1799",
+                "1800–1999",
+                "2000–2199",
+                "2200+"
+              ]
+            },
+            "y": {
+              "field": "standard_group",
+              "type": "nominal",
+              "title": "Standard rating group",
+              "sort": [
+                "2200+",
+                "2000–2199",
+                "1800–1999",
+                "1600–1799",
+                "Below 1600"
+              ]
+            },
+            "color": {
+              "aggregate": "sum",
+              "field": "flow_count",
+              "type": "quantitative",
+              "title": "Players",
+              "scale": {
+                "scheme": "brownbluegreen"
+              },
+              "legend": null
+            },
+            "tooltip": [
+              {
+                "field": "standard_group",
+                "type": "nominal",
+                "title": "Standard"
+              },
+              {
+                "field": "blitz_group",
+                "type": "nominal",
+                "title": "Blitz"
+              },
+              {
+                "aggregate": "sum",
+                "field": "flow_count",
+                "type": "quantitative",
+                "format": ",d",
+                "title": "Players"
+              }
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "aggregate": [
+                {
+                  "op": "sum",
+                  "field": "flow_count",
+                  "as": "cell_count"
+                }
+              ],
+              "groupby": [
+                "blitz_group",
+                "standard_group"
+              ]
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "Inter, Arial, sans-serif",
+            "fontSize": 10,
+            "fontWeight": 600
+          },
+          "encoding": {
+            "x": {
+              "field": "blitz_group",
+              "type": "nominal",
+              "sort": [
+                "Below 1600",
+                "1600–1799",
+                "1800–1999",
+                "2000–2199",
+                "2200+"
+              ]
+            },
+            "y": {
+              "field": "standard_group",
+              "type": "nominal",
+              "sort": [
+                "2200+",
+                "2000–2199",
+                "1800–1999",
+                "1600–1799",
+                "Below 1600"
+              ]
+            },
+            "text": {
+              "field": "cell_count",
+              "type": "quantitative",
+              "format": ",d"
+            },
+            "color": {
+              "condition": {
+                "test": "datum.cell_count <= 5000 || datum.cell_count >= 38000",
+                "value": "#fffaf2"
+              },
+              "value": "#33261E"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Rapid → Blitz",
+      "width": 250,
+      "height": 250,
+      "data": {
+        "url": "data/time_control_alluvial.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "stage_x": "number",
+            "flow_count": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.record_type === 'flow' && datum.stage_x === 0"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "rect",
+            "cornerRadius": 2,
+            "stroke": "#FBF7EF",
+            "strokeWidth": 1.2
+          },
+          "encoding": {
+            "x": {
+              "field": "blitz_group",
+              "type": "nominal",
+              "title": "Blitz rating group",
+              "sort": [
+                "Below 1600",
+                "1600–1799",
+                "1800–1999",
+                "2000–2199",
+                "2200+"
+              ]
+            },
+            "y": {
+              "field": "rapid_group",
+              "type": "nominal",
+              "title": "Rapid rating group",
+              "sort": [
+                "2200+",
+                "2000–2199",
+                "1800–1999",
+                "1600–1799",
+                "Below 1600"
+              ]
+            },
+            "color": {
+              "aggregate": "sum",
+              "field": "flow_count",
+              "type": "quantitative",
+              "title": "Players",
+              "scale": {
+                "scheme": "brownbluegreen"
+              },
+              "legend": null
+            },
+            "tooltip": [
+              {
+                "field": "rapid_group",
+                "type": "nominal",
+                "title": "Rapid"
+              },
+              {
+                "field": "blitz_group",
+                "type": "nominal",
+                "title": "Blitz"
+              },
+              {
+                "aggregate": "sum",
+                "field": "flow_count",
+                "type": "quantitative",
+                "format": ",d",
+                "title": "Players"
+              }
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "aggregate": [
+                {
+                  "op": "sum",
+                  "field": "flow_count",
+                  "as": "cell_count"
+                }
+              ],
+              "groupby": [
+                "blitz_group",
+                "rapid_group"
+              ]
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "Inter, Arial, sans-serif",
+            "fontSize": 10,
+            "fontWeight": 600
+          },
+          "encoding": {
+            "x": {
+              "field": "blitz_group",
+              "type": "nominal",
+              "sort": [
+                "Below 1600",
+                "1600–1799",
+                "1800–1999",
+                "2000–2199",
+                "2200+"
+              ]
+            },
+            "y": {
+              "field": "rapid_group",
+              "type": "nominal",
+              "sort": [
+                "2200+",
+                "2000–2199",
+                "1800–1999",
+                "1600–1799",
+                "Below 1600"
+              ]
+            },
+            "text": {
+              "field": "cell_count",
+              "type": "quantitative",
+              "format": ",d"
+            },
+            "color": {
+              "condition": {
+                "test": "datum.cell_count <= 5000 || datum.cell_count >= 38000",
+                "value": "#fffaf2"
+              },
+              "value": "#33261E"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "color": "shared"
+    }
+  }
+}

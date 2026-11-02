@@ -1,0 +1,132 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "width": "container",
+  "height": 300,
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding",
+    "resize": true
+  },
+  "background": "#fbf7ef",
+  "description": "Share of Standard-rated players in each rating range within each country; includes inactive players. Countries represent FIDE federations.",
+  "data": {
+    "url": "data/rating_groups.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "player_count": "number",
+        "country_total": "number",
+        "proportion": "number",
+        "country_order": "number",
+        "group_order": "number"
+      }
+    }
+  },
+  "mark": {
+    "type": "rect",
+    "stroke": "#fbf7ef",
+    "strokeWidth": 2
+  },
+  "encoding": {
+    "x": {
+      "field": "rating_group",
+      "type": "ordinal",
+      "sort": [
+        "Below 1600",
+        "1600\u20131799",
+        "1800\u20131999",
+        "2000\u20132199",
+        "2200+"
+      ],
+      "title": "Rating range",
+      "axis": {
+        "labelAngle": 0,
+        "labelLimit": 110
+      }
+    },
+    "y": {
+      "field": "country",
+      "type": "nominal",
+      "sort": [
+        "India",
+        "Russia",
+        "Spain",
+        "France",
+        "Germany",
+        "Poland",
+        "Italy",
+        "Iran"
+      ],
+      "title": "Country"
+    },
+    "color": {
+      "field": "proportion",
+      "type": "quantitative",
+      "title": "Share of rated players",
+      "scale": {
+        "domain": [
+          0,
+          1
+        ],
+        "range": [
+          "#f5f0e5",
+          "#d6dfd1",
+          "#a4bcae",
+          "#648d7f",
+          "#28564f"
+        ]
+      },
+      "legend": null
+    },
+    "tooltip": [
+      {
+        "field": "country",
+        "type": "nominal",
+        "title": "Country"
+      },
+      {
+        "field": "rating_group",
+        "type": "ordinal",
+        "title": "Rating range"
+      },
+      {
+        "field": "player_count",
+        "type": "quantitative",
+        "title": "Players in group",
+        "format": ","
+      },
+      {
+        "field": "country_total",
+        "type": "quantitative",
+        "title": "Rated players in country",
+        "format": ","
+      },
+      {
+        "field": "proportion",
+        "type": "quantitative",
+        "title": "Share within country",
+        "format": ".2%"
+      }
+    ]
+  },
+  "config": {
+    "font": "Inter, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "domain": false,
+      "ticks": false,
+      "labelColor": "#66574b",
+      "titleColor": "#33261e",
+      "labelFontSize": 12,
+      "titleFontSize": 13,
+      "labelPadding": 8,
+      "titlePadding": 12
+    },
+    "legend": {
+      "labelColor": "#66574b",
+      "titleColor": "#33261e"
+    }
+  }
+}

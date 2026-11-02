@@ -1,0 +1,150 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Chart 09: selected federations ranked by players rated 2200+.",
+  "width": 920,
+  "height": {"step": 28},
+  "background": "#FBF7EF",
+  "data": {
+    "url": "data/elite_dorling_cartogram.csv"
+  },
+  "transform": [
+    {
+      "calculate": "format(datum.elite_share_pct, '.2f') + '%'",
+      "as": "elite_share_label"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 3
+      },
+      "encoding": {
+        "y": {
+          "field": "country",
+          "type": "nominal",
+          "sort": {"field": "players_2200", "order": "descending"},
+          "title": null,
+          "axis": {
+            "labelFont": "Inter, Arial, sans-serif",
+            "labelFontSize": 13,
+            "labelColor": "#5A4638",
+            "labelPadding": 8,
+            "ticks": false,
+            "domain": false
+          }
+        },
+        "x": {
+          "field": "players_2200",
+          "type": "quantitative",
+          "title": "Players rated 2200+",
+          "scale": {"domain": [0, 3600]},
+          "axis": {
+            "format": ",d",
+            "grid": true,
+            "gridColor": "#D9CEBF",
+            "gridOpacity": 0.9,
+            "tickColor": "#C8B8A4",
+            "domain": false,
+            "labelFont": "Inter, Arial, sans-serif",
+            "labelFontSize": 12,
+            "labelColor": "#5A4638",
+            "titleFont": "Inter, Arial, sans-serif",
+            "titleFontSize": 14,
+            "titleFontWeight": 700,
+            "titleColor": "#33261E"
+          }
+        },
+        "color": {
+          "field": "elite_share_pct",
+          "type": "quantitative",
+          "title": "2200+ share",
+          "scale": {
+            "domain": [0, 13],
+            "range": ["#E8DCC8", "#C9985A", "#7A4A1B"]
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "gradientLength": 260,
+            "gradientThickness": 12,
+            "titleFont": "Inter, Arial, sans-serif",
+            "titleFontSize": 12,
+            "titleFontWeight": 700,
+            "titleColor": "#33261E",
+            "labelFont": "Inter, Arial, sans-serif",
+            "labelFontSize": 11,
+            "labelColor": "#66574B",
+            "format": ".0f",
+            "offset": 20
+          }
+        },
+        "tooltip": [
+          {
+            "field": "country",
+            "type": "nominal",
+            "title": "Federation"
+          },
+          {
+            "field": "players_2200",
+            "type": "quantitative",
+            "title": "Players rated 2200+",
+            "format": ",d"
+          },
+          {
+            "field": "rated_players",
+            "type": "quantitative",
+            "title": "All rated players",
+            "format": ",d"
+          },
+          {
+            "field": "elite_share_pct",
+            "type": "quantitative",
+            "title": "2200+ share (%)",
+            "format": ".2f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 6,
+        "font": "Inter, Arial, sans-serif",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#4A3426"
+      },
+      "encoding": {
+        "y": {
+          "field": "country",
+          "type": "nominal",
+          "sort": {"field": "players_2200", "order": "descending"}
+        },
+        "x": {
+          "field": "players_2200",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "elite_share_label",
+          "type": "nominal"
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelFont": "Inter, Arial, sans-serif",
+      "titleFont": "Inter, Arial, sans-serif"
+    },
+    "legend": {
+      "labelFont": "Inter, Arial, sans-serif",
+      "titleFont": "Inter, Arial, sans-serif"
+    }
+  }
+}

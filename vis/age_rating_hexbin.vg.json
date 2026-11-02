@@ -1,0 +1,178 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Two-dimensional hexagonal bins count individual players with valid FIDE standard ratings and birth years in the October 2026 snapshot. This is cross-sectional data.",
+  "width": "container",
+  "height": 540,
+  "background": null,
+  "data": {
+    "url": "data/age_rating_hexbin.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "age_x": "number",
+        "rating_y": "number",
+        "age_mid": "number",
+        "rating_mid": "number",
+        "vertex_order": "number",
+        "player_count": "number"
+      }
+    }
+  },
+  "encoding": {
+    "x": {
+      "field": "age_x",
+      "type": "quantitative",
+      "title": "Player age in 2026 (years)",
+      "scale": {
+        "domain": [0, 110],
+        "nice": false
+      },
+      "axis": {
+        "values": [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+        "format": "d",
+        "labelFont": "Inter, Arial, sans-serif",
+        "titleFont": "Inter, Arial, sans-serif",
+        "labelFontSize": 12,
+        "titleFontSize": 13,
+        "labelColor": "#66574B",
+        "titleColor": "#33261E",
+        "labelPadding": 7,
+        "titlePadding": 12,
+        "domain": false,
+        "tickColor": "#CBBBA7",
+        "grid": false
+      }
+    },
+    "y": {
+      "field": "rating_y",
+      "type": "quantitative",
+      "title": "FIDE standard rating",
+      "scale": {
+        "domain": [1150, 3050],
+        "nice": false
+      },
+      "axis": {
+        "values": [1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800],
+        "format": ",d",
+        "labelFont": "Inter, Arial, sans-serif",
+        "titleFont": "Inter, Arial, sans-serif",
+        "labelFontSize": 12,
+        "titleFontSize": 13,
+        "labelColor": "#66574B",
+        "titleColor": "#33261E",
+        "labelPadding": 7,
+        "titlePadding": 12,
+        "domain": false,
+        "tickColor": "#CBBBA7",
+        "gridColor": "#E9DFD2"
+      }
+    },
+    "tooltip": [
+      {
+        "field": "age_range",
+        "type": "nominal",
+        "title": "Age span"
+      },
+      {
+        "field": "rating_range",
+        "type": "nominal",
+        "title": "Rating span"
+      },
+      {
+        "field": "player_count",
+        "type": "quantitative",
+        "format": ",d",
+        "title": "Rated players"
+      }
+    ]
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "interpolate": "linear-closed",
+        "stroke": "#FBF7EF",
+        "strokeWidth": 0.8
+      },
+      "encoding": {
+        "detail": {
+          "field": "bin_id",
+          "type": "nominal"
+        },
+        "order": {
+          "field": "vertex_order",
+          "type": "quantitative"
+        },
+        "fill": {
+          "field": "player_count",
+          "type": "quantitative",
+          "title": "Players per hexagon",
+          "scale": {
+            "type": "sqrt",
+            "domainMin": 1,
+            "range": ["#E9E1D2", "#D8C3A5", "#B98255", "#8A5A3B", "#5C3928"]
+          },
+          "legend": null
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "max",
+              "field": "player_count",
+              "as": "player_count"
+            }
+          ],
+          "groupby": [
+            "bin_id",
+            "age_mid",
+            "rating_mid",
+            "age_range",
+            "rating_range"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "shape": "square",
+        "size": 1600,
+        "filled": true,
+        "color": "#2F241D",
+        "opacity": 0.001,
+        "strokeOpacity": 0
+      },
+      "encoding": {
+        "x": {
+          "field": "age_mid",
+          "type": "quantitative",
+          "scale": {
+            "domain": [0, 110],
+            "nice": false
+          }
+        },
+        "y": {
+          "field": "rating_mid",
+          "type": "quantitative",
+          "scale": {
+            "domain": [1150, 3050],
+            "nice": false
+          }
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Inter, Arial, sans-serif"
+  },
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding",
+    "resize": true
+  }
+}

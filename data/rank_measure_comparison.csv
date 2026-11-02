@@ -1,0 +1,13 @@
+country,iso_numeric,rated_players,population,population_year,players_per_million,total_rank,per_million_rank,rank_difference,display_order,selection_basis
+India,356,57414,1463865525,2025,39.22081572,1,135,134,1,Top 10 by rated-player count
+Russia,643,44120,143513328,2025,307.42789269,2,52,50,2,Top 10 by rated-player count
+Spain,724,40227,49355143,2025,815.05183766,3,17,14,3,Top 10 by rated-player count
+France,250,37752,68720337,2025,549.35702658,4,32,28,4,Top 10 by rated-player count
+Germany,276,36686,83491249,2025,439.39934352,5,40,35,5,Top 10 by rated-player count
+Poland,616,16863,36435861,2025,462.81327070,6,36,30,6,Top 10 by rated-player count
+Italy,380,16645,58915656,2025,282.52252678,7,57,50,7,Top 10 by rated-player count
+Iran,364,16402,92417681,2025,177.47686181,8,75,67,8,Top 10 by rated-player count
+United States,840,12595,341784857,2025,36.85066714,9,136,127,9,Top 10 by rated-player count
+Türkiye,792,11996,85878556,2025,139.68562769,10,90,80,10,Top 10 by rated-player count
+Palau,585,130,17663,2025,7360.01811697,134,1,-133,11,Top 1 eligible per-capita rank outside count Top 10
+Faroe Islands,234,276,54900,2025,5027.32240437,119,2,-117,12,Top 2 eligible per-capita rank outside count Top 10

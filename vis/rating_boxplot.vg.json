@@ -1,0 +1,134 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "width": "container",
+  "height": 320,
+  "background": "#fbf7ef",
+  "data": {
+    "url": "data/rating_boxplot.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "rating": "number",
+        "country_order": "number"
+      }
+    }
+  },
+  "mark": {
+    "type": "boxplot",
+    "extent": 1.5,
+    "size": 20,
+    "outliers": false,
+    "ticks": {
+      "size": 20
+    }
+  },
+  "encoding": {
+    "x": {
+      "field": "rating",
+      "type": "quantitative",
+      "title": "Standard rating",
+      "scale": {
+        "zero": false,
+        "domain": [
+          1400,
+          2600
+        ]
+      },
+      "axis": {
+        "format": ",.0f",
+        "labelFont": "Inter, Arial, sans-serif",
+        "titleFont": "Inter, Arial, sans-serif",
+        "labelFontSize": 12,
+        "titleFontSize": 13,
+        "labelColor": "#66574b",
+        "titleColor": "#33261e",
+        "gridColor": "#e9dfd2",
+        "labelPadding": 8,
+        "titlePadding": 12,
+        "domain": false,
+        "tickColor": "#cbbba7",
+        "tickCount": 5
+      }
+    },
+    "y": {
+      "field": "country_count",
+      "type": "nominal",
+      "title": "Country (rated players)",
+      "sort": [
+        "India (57,414)",
+        "Russia (44,120)",
+        "Spain (40,227)",
+        "France (37,752)",
+        "Germany (36,686)",
+        "Poland (16,863)",
+        "Italy (16,645)",
+        "Iran (16,402)"
+      ],
+      "axis": {
+        "labelAngle": 0,
+        "labelFont": "Inter, Arial, sans-serif",
+        "titleFont": "Inter, Arial, sans-serif",
+        "labelFontSize": 12,
+        "titleFontSize": 13,
+        "labelColor": "#66574b",
+        "titleColor": "#33261e",
+        "labelPadding": 8,
+        "titlePadding": 12,
+        "domain": false,
+        "tickColor": "#cbbba7",
+        "labelLimit": 160,
+        "ticks": false,
+        "title": null
+      }
+    }
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Inter, Arial, sans-serif",
+    "boxplot": {
+      "box": {
+        "fill": "#AF794D",
+        "stroke": "#452315",
+        "strokeWidth": 1.5
+      },
+      "median": {
+        "color": "#fffaf2",
+        "strokeWidth": 2,
+        "thickness": 2
+      },
+      "rule": {
+        "color": "#7b4b2a",
+        "strokeWidth": 1.2
+      },
+      "ticks": {
+        "color": "#7b4b2a",
+        "strokeWidth": 1.2
+      }
+    }
+  },
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding",
+    "resize": true
+  },
+  "description": "Does Quantity Mean Quality? Eight largest rated-player federations, ordered by player count. All 266109 ratings contribute to statistics. Outlier markers hidden; axis focuses on the whisker range, not the full rating range.",
+  "transform": [
+    {
+      "joinaggregate": [
+        {
+          "op": "count",
+          "as": "player_count"
+        }
+      ],
+      "groupby": [
+        "country"
+      ]
+    },
+    {
+      "calculate": "datum.country + ' (' + format(datum.player_count, ',') + ')'",
+      "as": "country_count"
+    }
+  ]
+}

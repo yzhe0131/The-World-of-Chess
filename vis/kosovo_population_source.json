@@ -1,0 +1,32 @@
+{
+  "source_url": "https://api.worldbank.org/v2/country/XK/indicator/SP.POP.TOTL?format=json&mrnev=1",
+  "retrieved_on": "2026-10-14",
+  "note": "383 is a project-local join key, not an official ISO numeric code.",
+  "response": [
+    {
+      "page": 1,
+      "pages": 1,
+      "per_page": 50,
+      "total": 1,
+      "sourceid": null,
+      "lastupdated": "2026-10-08"
+    },
+    [
+      {
+        "indicator": {
+          "id": "SP.POP.TOTL",
+          "value": "Population, total"
+        },
+        "country": {
+          "id": "XK",
+          "value": "Kosovo"
+        },
+        "countryiso3code": "XKX",
+        "date": "2025",
+        "value": 1576876,
+        "obs_status": "",
+        "decimal": 0
+      }
+    ]
+  ]
+}

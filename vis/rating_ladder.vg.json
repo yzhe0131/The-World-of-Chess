@@ -1,0 +1,188 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Global distribution of individual positive FIDE standard ratings in 100-point bins.",
+  "width": "container",
+  "height": 340,
+  "background": "#FBF7EF",
+  "data": {
+    "url": "data/rating_distribution.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "rating_start": "number",
+        "rating_end_exclusive": "number",
+        "player_count": "number",
+        "share": "number"
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "rect",
+        "stroke": "#713D24",
+        "strokeWidth": 0.6
+      },
+      "encoding": {
+        "x": {
+          "field": "rating_start",
+          "type": "quantitative",
+          "scale": {
+            "domain": [1400, 2900],
+            "nice": false
+          },
+          "axis": {
+            "title": "FIDE standard rating (100-point intervals)",
+            "values": [1400, 1600, 1800, 2000, 2200, 2400, 2600, 2800],
+            "format": ",.0f",
+            "labelFont": "Inter, Arial, sans-serif",
+            "titleFont": "Inter, Arial, sans-serif",
+            "labelFontSize": 11,
+            "titleFontSize": 12,
+            "labelColor": "#66574B",
+            "titleColor": "#33261E",
+            "labelPadding": 7,
+            "titlePadding": 12,
+            "domain": false,
+            "tickColor": "#CBBBA7",
+            "grid": false,
+            "labelOverlap": true
+          }
+        },
+        "x2": {
+          "field": "rating_end_exclusive"
+        },
+        "y2": {
+          "datum": 0
+        },
+        "y": {
+          "field": "player_count",
+          "type": "quantitative",
+          "scale": {
+            "zero": true
+          },
+          "axis": {
+            "title": "Number of rated players",
+            "format": ",.0f",
+            "tickCount": 5,
+            "labelFont": "Inter, Arial, sans-serif",
+            "titleFont": "Inter, Arial, sans-serif",
+            "labelFontSize": 11,
+            "titleFontSize": 12,
+            "labelColor": "#66574B",
+            "titleColor": "#33261E",
+            "labelPadding": 6,
+            "titlePadding": 10,
+            "domain": false,
+            "tickColor": "#CBBBA7",
+            "gridColor": "#E9DFD2"
+          }
+        },
+        "color": {
+          "condition": {
+            "test": "datum.rating_start >= 2200",
+            "value": "#754A32"
+          },
+          "value": "#B98255"
+        },
+        "tooltip": [
+          {
+            "field": "rating_range",
+            "type": "nominal",
+            "title": "Rating range"
+          },
+          {
+            "field": "player_count",
+            "type": "quantitative",
+            "format": ",d",
+            "title": "Players"
+          },
+          {
+            "field": "share",
+            "type": "quantitative",
+            "format": ".2%",
+            "title": "Share of rated players"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "rating": 2200
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "color": "#452315",
+        "strokeWidth": 1.5,
+        "strokeDash": [5, 4]
+      },
+      "encoding": {
+        "x": {
+          "field": "rating",
+          "type": "quantitative",
+          "scale": {
+            "domain": [1400, 2900],
+            "nice": false
+          }
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "rating": 2200,
+            "label": "2200+ · Top 3.6%"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "top",
+        "dx": 6,
+        "dy": 5,
+        "font": "Inter, Arial, sans-serif",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#452315"
+      },
+      "encoding": {
+        "x": {
+          "field": "rating",
+          "type": "quantitative",
+          "scale": {
+            "domain": [1400, 2900],
+            "nice": false
+          }
+        },
+        "y": {
+          "datum": 100000,
+          "type": "quantitative",
+          "scale": {
+            "domain": [0, 100000]
+          }
+        },
+        "text": {
+          "field": "label",
+          "type": "nominal"
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Inter, Arial, sans-serif"
+  },
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding",
+    "resize": true
+  }
+}

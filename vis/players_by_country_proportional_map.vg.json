@@ -1,0 +1,167 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "background": "#fbf7ef",
+  "width": "container",
+  "height": 640,
+  "projection": {
+    "type": "equalEarth"
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
+        "format": {
+          "type": "topojson",
+          "feature": "countries"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#ded4c5",
+        "stroke": "#fbf7ef",
+        "strokeWidth": 0.8
+      }
+    },
+    {
+      "data": {
+        "url": "data/players_by_country.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "iso_numeric": "number",
+            "rated_players": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "lookup": "iso_numeric",
+          "from": {
+            "data": {
+              "url": "data/country_centroids.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "iso_numeric": "number",
+                  "lon": "number",
+                  "lat": "number"
+                }
+              }
+            },
+            "key": "iso_numeric",
+            "fields": [
+              "country",
+              "lon",
+              "lat"
+            ]
+          }
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "opacity": 0.75,
+        "stroke": "#452315",
+        "strokeWidth": 1.2
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "size": {
+          "field": "rated_players",
+          "type": "quantitative",
+          "title": "FIDE-rated players",
+          "scale": {
+            "type": "linear",
+            "domain": [
+              0,
+              60000
+            ],
+            "range": [
+              0,
+              3000
+            ],
+            "zero": true
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "values": [
+              10000,
+              30000,
+              50000
+            ],
+            "format": "~s",
+            "titlePadding": 8,
+            "labelOverlap": true,
+            "symbolStrokeWidth": 1.2,
+            "labelFont": "Inter, Arial, sans-serif",
+            "titleFont": "Inter, Arial, sans-serif",
+            "labelFontSize": 11,
+            "titleFontSize": 12,
+            "labelColor": "#66574b",
+            "titleColor": "#33261e"
+          }
+        },
+        "order": {
+          "field": "rated_players",
+          "type": "quantitative",
+          "sort": "descending"
+        },
+        "color": {
+          "value": "#945B37"
+        },
+        "strokeWidth": {
+          "value": 1.2
+        },
+        "tooltip": [
+          {
+            "field": "country",
+            "type": "nominal",
+            "title": "Country"
+          },
+          {
+            "field": "rated_players",
+            "type": "quantitative",
+            "title": "FIDE-rated players",
+            "format": ","
+          },
+          {
+            "field": "lon",
+            "type": "quantitative",
+            "title": "Longitude",
+            "format": ".2f"
+          },
+          {
+            "field": "lat",
+            "type": "quantitative",
+            "title": "Latitude",
+            "format": ".2f"
+          }
+        ]
+      }
+    }
+  ],
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding",
+    "resize": true
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Inter, Arial, sans-serif",
+    "legend": {
+      "labelColor": "#66574b",
+      "titleColor": "#33261e",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    }
+  }
+}

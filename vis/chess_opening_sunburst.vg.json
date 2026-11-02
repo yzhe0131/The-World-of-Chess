@@ -1,0 +1,237 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "A drillable sunburst of first moves, opening families and variations, sized by source-reported game counts.",
+  "width": 760,
+  "height": 760,
+  "padding": 0,
+  "background": "#FBF7EF",
+  "data": {
+    "url": "../data/chess_opening_sunburst.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+  "params": [
+    {
+      "name": "currentFocus",
+      "value": "root"
+    }
+  ],
+  "transform": [
+    {
+      "filter": "datum.focus_id === currentFocus"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "arc",
+        "stroke": "#FBF7EF",
+        "strokeWidth": 1.5,
+        "cursor": "pointer"
+      },
+      "encoding": {
+        "theta": {
+          "field": "start_angle",
+          "type": "quantitative",
+          "scale": {
+            "domain": [-1.57079632679, 4.71238898038],
+            "range": [-1.57079632679, 4.71238898038]
+          }
+        },
+        "theta2": {
+          "field": "end_angle",
+          "type": "quantitative"
+        },
+        "radius": {
+          "field": "inner_radius",
+          "type": "quantitative",
+          "scale": {
+            "domain": [0, 340],
+            "range": [0, 340]
+          }
+        },
+        "radius2": {
+          "field": "outer_radius",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "fill_color",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "#386B88",
+              "#5C879D",
+              "#86A9B8",
+              "#B4C9D0",
+              "#A9621E",
+              "#C0813D",
+              "#D6A36B",
+              "#E8C9A1",
+              "#3E7150",
+              "#628B6D",
+              "#91AD96",
+              "#BBCABB",
+              "#7A3F4D",
+              "#985D68",
+              "#B37F87",
+              "#D3AEB2",
+              "#625178",
+              "#817194",
+              "#A59AB4",
+              "#C9C1D0"
+            ],
+            "range": [
+              "#557C8C",
+              "#7895A0",
+              "#9DB3B9",
+              "#C3D0D0",
+              "#98643E",
+              "#B98255",
+              "#D0A679",
+              "#E2C7A8",
+              "#4C7160",
+              "#71917A",
+              "#98AD9B",
+              "#C0CDC1",
+              "#754A32",
+              "#946B52",
+              "#B18E78",
+              "#D0B8A7",
+              "#8A794D",
+              "#A49463",
+              "#C0B17F",
+              "#D7CCA6"
+            ]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "full_name",
+            "type": "nominal",
+            "title": "Opening"
+          },
+          {
+            "field": "games",
+            "type": "quantitative",
+            "format": ",d",
+            "title": "Recorded games"
+          },
+          {
+            "field": "all_share",
+            "type": "quantitative",
+            "format": ".1%",
+            "title": "Share of chart total"
+          },
+          {
+            "field": "parent_share",
+            "type": "quantitative",
+            "format": ".1%",
+            "title": "Share of parent opening"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "toNumber(datum.label_visible) === 1"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 10,
+        "fontWeight": 600,
+        "limit": 160,
+        "ellipsis": "…",
+        "align": "center",
+        "baseline": "middle",
+        "cursor": "pointer"
+      },
+      "encoding": {
+        "x": {
+          "field": "label_x",
+          "type": "quantitative",
+          "scale": {
+            "domain": [0, 760],
+            "range": [0, 760]
+          },
+          "axis": null
+        },
+        "y": {
+          "field": "label_y",
+          "type": "quantitative",
+          "scale": {
+            "domain": [0, 760],
+            "range": [0, 760]
+          },
+          "axis": null
+        },
+        "text": {
+          "field": "label_text",
+          "type": "nominal"
+        },
+        "angle": {
+          "field": "label_rotation",
+          "type": "quantitative",
+          "scale": {
+            "domain": [-90, 90],
+            "range": [-90, 90]
+          }
+        },
+        "color": {
+          "field": "label_color",
+          "type": "nominal",
+          "scale": null
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "max",
+              "field": "focus_name",
+              "as": "focus_name"
+            }
+          ],
+          "groupby": ["focus_id"]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 11,
+        "fontWeight": 600,
+        "color": "#66574B",
+        "limit": 100,
+        "ellipsis": "…",
+        "align": "center",
+        "baseline": "middle"
+      },
+      "encoding": {
+        "x": {
+          "value": 380
+        },
+        "y": {
+          "value": 380
+        },
+        "text": {
+          "field": "focus_name",
+          "type": "nominal"
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "Inter"
+    }
+  }
+}

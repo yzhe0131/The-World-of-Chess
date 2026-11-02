@@ -1,0 +1,822 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "description": "Slope chart comparing global competition ranks among eligible federations for the ten largest FIDE standard-rated player pools plus Malaysia. Label offsets are connected to genuine rank endpoints. This is a metric comparison, not change over time.",
+  "width": "container",
+  "height": 650,
+  "padding": {
+    "top": 36,
+    "bottom": 12,
+    "left": 5,
+    "right": 5
+  },
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding",
+    "resize": true
+  },
+  "background": "#fbf7ef",
+  "params": [
+    {
+      "name": "countryPick",
+      "value": "Malaysia"
+    }
+  ],
+  "data": {
+    "url": "data/population_ranks.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "rated_players": "number",
+        "population": "number",
+        "population_year": "number",
+        "players_per_million": "number",
+        "count_rank": "number",
+        "per_capita_rank": "number",
+        "selected": "number",
+        "count_label_rank": "number",
+        "per_capita_label_rank": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.selected === 1"
+    }
+  ],
+  "layer": [
+    {
+      "data": {
+        "values": [
+          {
+            "side": 0
+          },
+          {
+            "side": 1
+          }
+        ]
+      },
+      "transform": [],
+      "mark": {
+        "type": "rule",
+        "color": "#d5c7b7"
+      },
+      "encoding": {
+        "x": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -0.43,
+              1.43
+            ],
+            "nice": false
+          },
+          "axis": null,
+          "field": "side"
+        },
+        "y": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              200
+            ],
+            "reverse": true,
+            "nice": false
+          },
+          "axis": null,
+          "datum": 1
+        },
+        "y2": {
+          "datum": 200
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "side": 0,
+            "heading": "Total rated players"
+          },
+          {
+            "side": 1,
+            "heading": "Players per million"
+          }
+        ]
+      },
+      "transform": [],
+      "mark": {
+        "type": "text",
+        "fontSize": 13,
+        "fontWeight": 600,
+        "color": "#33261e",
+        "baseline": "bottom"
+      },
+      "encoding": {
+        "x": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -0.43,
+              1.43
+            ],
+            "nice": false
+          },
+          "axis": null,
+          "field": "side"
+        },
+        "y": {
+          "value": -14
+        },
+        "text": {
+          "field": "heading"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "fold": [
+            "count_rank",
+            "per_capita_rank"
+          ],
+          "as": [
+            "metric",
+            "rank"
+          ]
+        },
+        {
+          "calculate": "datum.metric === 'count_rank' ? 0 : 1",
+          "as": "side"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "strokeWidth": 1.4,
+        "opacity": 0.65
+      },
+      "encoding": {
+        "x": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -0.43,
+              1.43
+            ],
+            "nice": false
+          },
+          "axis": null,
+          "field": "side"
+        },
+        "y": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              200
+            ],
+            "reverse": true,
+            "nice": false
+          },
+          "axis": null,
+          "field": "rank"
+        },
+        "detail": {
+          "field": "country"
+        },
+        "order": {
+          "field": "side"
+        },
+        "color": {
+          "value": "#b3a597"
+        },
+        "tooltip": [
+          {
+            "field": "country",
+            "type": "nominal",
+            "title": "Country / federation"
+          },
+          {
+            "field": "rated_players",
+            "type": "quantitative",
+            "title": "Rated players",
+            "format": ","
+          },
+          {
+            "field": "count_rank",
+            "type": "quantitative",
+            "title": "Total-player rank",
+            "format": ".0f"
+          },
+          {
+            "field": "players_per_million",
+            "type": "quantitative",
+            "title": "Players per million",
+            "format": ",.1f"
+          },
+          {
+            "field": "per_capita_rank",
+            "type": "quantitative",
+            "title": "Per-million rank",
+            "format": ".0f"
+          },
+          {
+            "field": "population",
+            "type": "quantitative",
+            "title": "Population",
+            "format": ","
+          },
+          {
+            "field": "population_year",
+            "type": "quantitative",
+            "title": "Population year",
+            "format": ".0f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "fold": [
+            "count_rank",
+            "per_capita_rank"
+          ],
+          "as": [
+            "metric",
+            "rank"
+          ]
+        },
+        {
+          "calculate": "datum.metric === 'count_rank' ? 0 : 1",
+          "as": "side"
+        },
+        {
+          "filter": "datum.country === countryPick"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "strokeWidth": 3,
+        "opacity": 1
+      },
+      "encoding": {
+        "x": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -0.43,
+              1.43
+            ],
+            "nice": false
+          },
+          "axis": null,
+          "field": "side"
+        },
+        "y": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              200
+            ],
+            "reverse": true,
+            "nice": false
+          },
+          "axis": null,
+          "field": "rank"
+        },
+        "detail": {
+          "field": "country"
+        },
+        "order": {
+          "field": "side"
+        },
+        "color": {
+          "value": "#713d24"
+        },
+        "tooltip": [
+          {
+            "field": "country",
+            "type": "nominal",
+            "title": "Country / federation"
+          },
+          {
+            "field": "rated_players",
+            "type": "quantitative",
+            "title": "Rated players",
+            "format": ","
+          },
+          {
+            "field": "count_rank",
+            "type": "quantitative",
+            "title": "Total-player rank",
+            "format": ".0f"
+          },
+          {
+            "field": "players_per_million",
+            "type": "quantitative",
+            "title": "Players per million",
+            "format": ",.1f"
+          },
+          {
+            "field": "per_capita_rank",
+            "type": "quantitative",
+            "title": "Per-million rank",
+            "format": ".0f"
+          },
+          {
+            "field": "population",
+            "type": "quantitative",
+            "title": "Population",
+            "format": ","
+          },
+          {
+            "field": "population_year",
+            "type": "quantitative",
+            "title": "Population year",
+            "format": ".0f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "fold": [
+            "count_rank",
+            "per_capita_rank"
+          ],
+          "as": [
+            "metric",
+            "rank"
+          ]
+        },
+        {
+          "calculate": "datum.metric === 'count_rank' ? 0 : 1",
+          "as": "side"
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 55,
+        "stroke": "#fbf7ef",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -0.43,
+              1.43
+            ],
+            "nice": false
+          },
+          "axis": null,
+          "field": "side"
+        },
+        "y": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              200
+            ],
+            "reverse": true,
+            "nice": false
+          },
+          "axis": null,
+          "field": "rank"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.country === countryPick",
+            "value": "#713d24"
+          },
+          "value": "#b3a597"
+        },
+        "tooltip": [
+          {
+            "field": "country",
+            "type": "nominal",
+            "title": "Country / federation"
+          },
+          {
+            "field": "rated_players",
+            "type": "quantitative",
+            "title": "Rated players",
+            "format": ","
+          },
+          {
+            "field": "count_rank",
+            "type": "quantitative",
+            "title": "Total-player rank",
+            "format": ".0f"
+          },
+          {
+            "field": "players_per_million",
+            "type": "quantitative",
+            "title": "Players per million",
+            "format": ",.1f"
+          },
+          {
+            "field": "per_capita_rank",
+            "type": "quantitative",
+            "title": "Per-million rank",
+            "format": ".0f"
+          },
+          {
+            "field": "population",
+            "type": "quantitative",
+            "title": "Population",
+            "format": ","
+          },
+          {
+            "field": "population_year",
+            "type": "quantitative",
+            "title": "Population year",
+            "format": ".0f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 0.8
+      },
+      "encoding": {
+        "x": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -0.43,
+              1.43
+            ],
+            "nice": false
+          },
+          "axis": null,
+          "datum": 0
+        },
+        "x2": {
+          "datum": -0.035
+        },
+        "y": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              200
+            ],
+            "reverse": true,
+            "nice": false
+          },
+          "axis": null,
+          "field": "count_rank"
+        },
+        "y2": {
+          "field": "count_label_rank"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.country === countryPick",
+            "value": "#713d24"
+          },
+          "value": "#b3a597"
+        },
+        "tooltip": [
+          {
+            "field": "country",
+            "type": "nominal",
+            "title": "Country / federation"
+          },
+          {
+            "field": "rated_players",
+            "type": "quantitative",
+            "title": "Rated players",
+            "format": ","
+          },
+          {
+            "field": "count_rank",
+            "type": "quantitative",
+            "title": "Total-player rank",
+            "format": ".0f"
+          },
+          {
+            "field": "players_per_million",
+            "type": "quantitative",
+            "title": "Players per million",
+            "format": ",.1f"
+          },
+          {
+            "field": "per_capita_rank",
+            "type": "quantitative",
+            "title": "Per-million rank",
+            "format": ".0f"
+          },
+          {
+            "field": "population",
+            "type": "quantitative",
+            "title": "Population",
+            "format": ","
+          },
+          {
+            "field": "population_year",
+            "type": "quantitative",
+            "title": "Population year",
+            "format": ".0f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "calculate": "datum.country + '  #' + datum.count_rank",
+          "as": "endpoint_label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "fontSize": 12,
+        "dx": -4,
+        "fontWeight": 500
+      },
+      "encoding": {
+        "x": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -0.43,
+              1.43
+            ],
+            "nice": false
+          },
+          "axis": null,
+          "datum": -0.035
+        },
+        "y": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              200
+            ],
+            "reverse": true,
+            "nice": false
+          },
+          "axis": null,
+          "field": "count_label_rank"
+        },
+        "text": {
+          "field": "endpoint_label"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.country === countryPick",
+            "value": "#713d24"
+          },
+          "value": "#66574b"
+        },
+        "tooltip": [
+          {
+            "field": "country",
+            "type": "nominal",
+            "title": "Country / federation"
+          },
+          {
+            "field": "rated_players",
+            "type": "quantitative",
+            "title": "Rated players",
+            "format": ","
+          },
+          {
+            "field": "count_rank",
+            "type": "quantitative",
+            "title": "Total-player rank",
+            "format": ".0f"
+          },
+          {
+            "field": "players_per_million",
+            "type": "quantitative",
+            "title": "Players per million",
+            "format": ",.1f"
+          },
+          {
+            "field": "per_capita_rank",
+            "type": "quantitative",
+            "title": "Per-million rank",
+            "format": ".0f"
+          },
+          {
+            "field": "population",
+            "type": "quantitative",
+            "title": "Population",
+            "format": ","
+          },
+          {
+            "field": "population_year",
+            "type": "quantitative",
+            "title": "Population year",
+            "format": ".0f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 0.8
+      },
+      "encoding": {
+        "x": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -0.43,
+              1.43
+            ],
+            "nice": false
+          },
+          "axis": null,
+          "datum": 1
+        },
+        "x2": {
+          "datum": 1.035
+        },
+        "y": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              200
+            ],
+            "reverse": true,
+            "nice": false
+          },
+          "axis": null,
+          "field": "per_capita_rank"
+        },
+        "y2": {
+          "field": "per_capita_label_rank"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.country === countryPick",
+            "value": "#713d24"
+          },
+          "value": "#b3a597"
+        },
+        "tooltip": [
+          {
+            "field": "country",
+            "type": "nominal",
+            "title": "Country / federation"
+          },
+          {
+            "field": "rated_players",
+            "type": "quantitative",
+            "title": "Rated players",
+            "format": ","
+          },
+          {
+            "field": "count_rank",
+            "type": "quantitative",
+            "title": "Total-player rank",
+            "format": ".0f"
+          },
+          {
+            "field": "players_per_million",
+            "type": "quantitative",
+            "title": "Players per million",
+            "format": ",.1f"
+          },
+          {
+            "field": "per_capita_rank",
+            "type": "quantitative",
+            "title": "Per-million rank",
+            "format": ".0f"
+          },
+          {
+            "field": "population",
+            "type": "quantitative",
+            "title": "Population",
+            "format": ","
+          },
+          {
+            "field": "population_year",
+            "type": "quantitative",
+            "title": "Population year",
+            "format": ".0f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "calculate": "datum.country + '  #' + datum.per_capita_rank",
+          "as": "endpoint_label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "fontSize": 12,
+        "dx": 4,
+        "fontWeight": 500
+      },
+      "encoding": {
+        "x": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              -0.43,
+              1.43
+            ],
+            "nice": false
+          },
+          "axis": null,
+          "datum": 1.035
+        },
+        "y": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              200
+            ],
+            "reverse": true,
+            "nice": false
+          },
+          "axis": null,
+          "field": "per_capita_label_rank"
+        },
+        "text": {
+          "field": "endpoint_label"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.country === countryPick",
+            "value": "#713d24"
+          },
+          "value": "#66574b"
+        },
+        "tooltip": [
+          {
+            "field": "country",
+            "type": "nominal",
+            "title": "Country / federation"
+          },
+          {
+            "field": "rated_players",
+            "type": "quantitative",
+            "title": "Rated players",
+            "format": ","
+          },
+          {
+            "field": "count_rank",
+            "type": "quantitative",
+            "title": "Total-player rank",
+            "format": ".0f"
+          },
+          {
+            "field": "players_per_million",
+            "type": "quantitative",
+            "title": "Players per million",
+            "format": ",.1f"
+          },
+          {
+            "field": "per_capita_rank",
+            "type": "quantitative",
+            "title": "Per-million rank",
+            "format": ".0f"
+          },
+          {
+            "field": "population",
+            "type": "quantitative",
+            "title": "Population",
+            "format": ","
+          },
+          {
+            "field": "population_year",
+            "type": "quantitative",
+            "title": "Population year",
+            "format": ".0f"
+          }
+        ]
+      }
+    }
+  ],
+  "config": {
+    "font": "Inter, Arial, sans-serif",
+    "view": {
+      "stroke": null
+    }
+  }
+}
